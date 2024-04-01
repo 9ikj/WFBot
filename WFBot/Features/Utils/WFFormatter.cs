@@ -736,14 +736,14 @@ namespace WFBot.Features.Utils
             }
             sb.AppendLine($"地点: [{inv.node}]");
 
-            sb.AppendLine($"> 进攻方: {inv.attackingFaction}");
+            sb.AppendLine($"> 进攻方: {inv.Attacker.Faction}");
             if (!inv.vsInfestation)
-                sb.AppendLine($"奖励: {ToString(inv.attackerReward)}");
+                sb.AppendLine($"奖励: {ToString(inv.Attacker.Reward)}");
             sb.AppendLine($"进度: {completion}%");
             // sb.AppendLine();
 
-            sb.AppendLine($"> 防守方: {inv.defendingFaction}");
-            sb.AppendLine($"奖励: {ToString(inv.defenderReward)}");
+            sb.AppendLine($"> 防守方: {inv.Defender.Faction}");
+            sb.AppendLine($"奖励: {ToString(inv.Defender.Reward)}");
             sb.Append($"进度 {100 - completion}%");
             return sb.ToString();
         }
@@ -908,7 +908,7 @@ namespace WFBot.Features.Utils
 
             foreach (var item in reward.countedItems)
             {
-                rewards.Add($"{item.count}x{item.type}");
+                rewards.Add($"{item.Count}x{item.Type}");
             }
 
             return string.Join(" + ", rewards);

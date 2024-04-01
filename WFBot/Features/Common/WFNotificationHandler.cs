@@ -290,14 +290,14 @@ namespace WFBot.Features.Common
 
         private static IEnumerable<string> GetAllInvasionsCountedItems(WFInvasion inv)
         {
-            foreach (var reward in inv.attackerReward.countedItems)
+            foreach (var reward in inv.Attacker.Reward.countedItems)
             {
-                yield return reward.type;
+                yield return reward.Type;
             }
 
-            foreach (var reward in inv.defenderReward.countedItems)
+            foreach (var reward in inv.Defender.Reward.countedItems)
             {
-                yield return reward.type;
+                yield return reward.Type;
             }
         }
         

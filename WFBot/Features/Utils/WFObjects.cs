@@ -1763,10 +1763,15 @@ namespace WFBot.Features.Utils
         public string startString { get; set; }
         public string node { get; set; }
         public string desc { get; set; }
-        public RewardInfo attackerReward { get; set; }
-        public string attackingFaction { get; set; }
-        public RewardInfo defenderReward { get; set; }
-        public string defendingFaction { get; set; }
+
+        [JsonProperty("attackingFaction")]
+        public string AttackingFaction { get; set; }
+
+        [JsonProperty("attacker")]
+        public Attacker Attacker { get; set; }
+
+        [JsonProperty("defender")]
+        public Attacker Defender { get; set; }
         public bool vsInfestation { get; set; }
         public int count { get; set; }
         public int requiredRuns { get; set; }
@@ -1775,22 +1780,33 @@ namespace WFBot.Features.Utils
         public string eta { get; set; }
         public string[] rewardTypes { get; set; }
     }
+    public class Attacker
+    {
+        [JsonProperty("reward", NullValueHandling = NullValueHandling.Include)]
+        public RewardInfo Reward { get; set; }
 
+        [JsonProperty("faction")]
+        public string Faction { get; set; }
+
+        [JsonProperty("factionKey")]
+        public string FactionKey { get; set; }
+    }
     public class RewardInfo
     {
+        private CountedItem[] countedItems1;
         public object[] items { get; set; }
-        public Counteditem[] countedItems { get; set; }
+
+        public CountedItem[] countedItems
+        {
+            get => countedItems1 ?? Array.Empty<CountedItem>();
+            set => countedItems1 = value;
+        }
+
         public int credits { get; set; }
         public string asString { get; set; }
         public string itemString { get; set; }
         public string thumbnail { get; set; }
         public int color { get; set; }
-    }
-
-    public class Counteditem
-    {
-        public int count { get; set; }
-        public string type { get; set; }
     }
 
 

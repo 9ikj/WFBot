@@ -333,8 +333,11 @@ namespace WFBot.Features.Utils
 
         public void TranslateInvasion(WFInvasion invasion)
         {
-            TranslateReward(invasion.attackerReward);
-            TranslateReward(invasion.defenderReward);
+            if (!invasion.vsInfestation)
+            {
+                TranslateReward(invasion.Attacker.Reward);
+            }
+            TranslateReward(invasion.Defender.Reward);
             
             invasion.node = TranslateNode(invasion.node);
 
@@ -345,12 +348,12 @@ namespace WFBot.Features.Utils
         {
             foreach (var item in reward.countedItems)
             {
-                item.type = invasionTranslator.Translate(item.type).Result;
+                item.Type = invasionTranslator.Translate(item.Type).Result;
             }
 
             foreach (var t in reward.countedItems)
             {
-                t.type = dictTranslator.Translate(t.type).Result;
+                t.Type = dictTranslator.Translate(t.Type).Result;
             }
         }
 

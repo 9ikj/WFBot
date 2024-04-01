@@ -105,14 +105,16 @@ namespace WFBot.Features.ImageRendering
             var grineerColor = ColorX.FromArgb(227, 49, 62);
             var infestedColor = ColorX.FromArgb(106, 220, 141);
             var corpusColor = ColorX.FromArgb(96, 182, 229);
-            var aColor = invasion.attackingFaction switch
+            var attacker = invasion.Attacker;
+            var aColor = attacker.Faction switch
             {
                 "Corpus" => corpusColor,
                 "Infested" => infestedColor, 
                 "Grineer" => grineerColor
             };
             var aPercent = invasion.completion / 100.0;
-            var bColor = invasion.defendingFaction switch
+            var defender = invasion.Defender;
+            var bColor = defender.Faction switch
             {
                 "Corpus" => corpusColor,
                 "Infested" => infestedColor,
@@ -124,19 +126,19 @@ namespace WFBot.Features.ImageRendering
             var breakPoint = (int)(aPercent * percentageImage.Width);
             percentageImage.Mutate(x => x.Fill(new Rgba32(aColor.R, aColor.G, aColor.B),  new RectangleF(0,0, breakPoint, percentageImage.Height)));
             percentageImage.Mutate(x => x.Fill(new Rgba32(bColor.R, bColor.G, bColor.B), new RectangleF(breakPoint, 0, percentageImage.Width - breakPoint, percentageImage.Height)));
-            var factionA = $"{invasion.attackingFaction.ToUpper()} {aPercent*100:F1}%";
-            var factionB = $"{bPercent*100:F1}% {invasion.defendingFaction.ToUpper()}";
-            var rewardA = $"{(!invasion.vsInfestation ? $"{WFFormatter.ToString(invasion.attackerReward)}" : "")}";
-            var rewardB = $"{WFFormatter.ToString(invasion.defenderReward)}";
+            var factionA = $"{attacker.Faction.ToUpper()} {aPercent*100:F1}%";
+            var factionB = $"{bPercent*100:F1}% {defender.Faction.ToUpper()}";
+            var rewardA = $"{(!invasion.vsInfestation ? $"{WFFormatter.ToString(attacker.Reward)}" : "")}";
+            var rewardB = $"{WFFormatter.ToString(defender.Reward)}";
             var textOptions = CreateTextOptions(18);
             var factionImage = new Image<Rgba32>(560, 40);
             var rewardImage = new Image<Rgba32>(560, 40);
-            using var attackerImage = GetResource($"Factions.{invasion.attackingFaction.ToLower()}").Clone().Resize(30, 30);
-            using var defenderImage = GetResource($"Factions.{invasion.defendingFaction.ToLower()}").Clone().Resize(30, 30);
+            using var attackerImage = GetResource($"Factions.{attacker.Faction.ToLower()}").Clone().Resize(30, 30);
+            using var defenderImage = GetResource($"Factions.{defender.Faction.ToLower()}").Clone().Resize(30, 30);
             using var attackerReward = invasion.vsInfestation
                 ? new Image<Rgba32>(35, 35)
-                : GetInvasionReward(invasion.attackerReward.countedItems.First().type).Clone().Resize(35, 35);
-            using var defenderReward = GetInvasionReward(invasion.defenderReward.countedItems.First().type).Clone().Resize(35, 35);
+                : GetInvasionReward(attacker.Reward.countedItems.First().Type).Clone().Resize(35, 35);
+            using var defenderReward = GetInvasionReward(defender.Reward.countedItems.First().Type).Clone().Resize(35, 35);
             var desc = RenderText($"{FlipNode(invasion.node)}", CreateTextOptions(23));
             factionImage.Mutate(x => x.DrawImage(attackerImage, new Point(0,0), new GraphicsOptions()));
             rewardImage.Mutate(x => x.DrawImage(attackerReward, new Point(0,0), new GraphicsOptions()));
