@@ -1782,13 +1782,12 @@ namespace WFBot.Features.Utils
     }
     public class Attacker
     {
-        private RewardInfo reward;
-
-        [JsonProperty("reward", NullValueHandling = NullValueHandling.Include)]
+        private RewardInfo reward1;
+        [JsonProperty("reward")]
         public RewardInfo Reward
         {
-            get => reward ?? new RewardInfo();
-            set => reward = value;
+            get => reward1 ?? new RewardInfo();
+            set => reward1 = value;
         }
 
         [JsonProperty("faction")]
